@@ -30,8 +30,8 @@ export async function login(account: defs.Account) {
 
 export async function findFile(uuid: string, projectId: string, file: string) {
   return await core.group("🔍 Find file", async () => {
-    return await fetch(`https://modfile-dl.mcmod.cn/admin/${projectId}/`, {
-      referrer: "https://modfile-dl.mcmod.cn/admin/",
+    return await fetch(`https://modfile.mcmod.cn/admin/${projectId}/`, {
+      referrer: "https://modfile.mcmod.cn/admin/",
       headers: { Cookie: `_uuid=${uuid}` },
     }).then(async (res) => {
       if (!res.ok) throw Error(`${res.status}`);
@@ -57,7 +57,7 @@ export async function upload(
   platforms: defs.Platform[],
   loaders: defs.Loader[],
   tags: defs.Tag[],
-  file: string
+  file: string,
 ) {
   return core.group("📦 Upload", async () => {
     core.info(`File to upload: ${path.basename(file)}`);
@@ -70,9 +70,9 @@ export async function upload(
     form.append("tagList", tags.join(","));
     form.append("0", fs.createReadStream(file));
 
-    await fetch("https://modfile-dl.mcmod.cn/action/upload/", {
+    await fetch("https://modfile.mcmod.cn/action/upload/", {
       method: "POST",
-      referrer: `https://modfile-dl.mcmod.cn/admin/${projectId}/`,
+      referrer: `https://modfile.mcmod.cn/admin/${projectId}/`,
       headers: {
         Cookie: `_uuid=${uuid}`,
         ...form.getHeaders(),
